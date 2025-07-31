@@ -17,6 +17,7 @@ import { UserSessionsModule } from 'src/user_sessions/user_sessions.module';
 import { UserGateway } from './infrastructure/gateway/user.gateway';
 import { UserCommandController } from './presentation/user.command.controller';
 import { UserQueryController } from './presentation/user.query.controller';
+import { SearchUserService } from './application/service/search-user.service';
 
     @Module({
         imports: [
@@ -36,6 +37,7 @@ import { UserQueryController } from './presentation/user.query.controller';
             UserAuthService,
             UserQueryService,
             UserReadFacade,
+            SearchUserService,
 
             UserGateway,
 
@@ -58,6 +60,6 @@ import { UserQueryController } from './presentation/user.query.controller';
             { provide: 'IService<UserCreateInput>', useExisting: UserCreateService }
         ],
 
-        exports: [UserReadFacade, UserAuthService, 'IService<UserCreateInput>', UserGateway]
+        exports: [UserReadFacade, UserAuthService, 'IService<UserCreateInput>', UserGateway, SearchUserService]
     })
     export class UserModule {}

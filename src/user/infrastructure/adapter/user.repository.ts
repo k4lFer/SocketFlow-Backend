@@ -15,8 +15,12 @@ export class UserRepository implements IUserRepository {
 
         private readonly mapper: UserOrmMapper
     ) {}
-    async searchUsersWithRelationshipStatus(currentUserId: string, searchTerm: string | null, pageNumber: number, pageSize: number): Promise<PagedResult<User>> {
-        const offset = (pageNumber - 1) * pageSize;
+    async searchUsersWithRelationshipStatus(currentUserId: string, searchTerm?: string | null, pageNumber?: number, pageSize?: number): Promise<PagedResult<User>> {
+        const safePage = pageNumber && pageNumber > 0 ? pageNumber : 1;
+        const safePageSize = pageSize && pageSize > 0 ? pageSize : 10;
+
+        const offset = (safePage - 1) * safePageSize;
+
 
         const queryBuilder = this.repository.createQueryBuilder('user')
             .where('user.id != :currentUserId', { currentUserId });
@@ -25,13 +29,13 @@ export class UserRepository implements IUserRepository {
             queryBuilder.andWhere('user.username LIKE :search', { search: `%${searchTerm}%` });
         }
 
-        queryBuilder.skip(offset).take(pageSize);
+        queryBuilder.skip(offset).take(safePageSize);
 
         const [users, total] = await queryBuilder.getManyAndCount();
 
         const domainUsers: User[] = users.map(user => this.mapper.toDomain(user));
 
-        return new PagedResult<User>(domainUsers, total, pageNumber, pageSize);
+        return new PagedResult<User>(domainUsers, total, safePage, safePageSize);
     }
     async findByEmail(email: string): Promise<User | null> {
         const entity = await this.repository.findOne({ where: { email: email } });

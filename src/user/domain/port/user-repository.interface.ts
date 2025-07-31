@@ -6,8 +6,8 @@ export interface IUserRepository extends IGenericRepository<User> {
     findByEmail(email: string): Promise<User | null>;
     searchUsersWithRelationshipStatus(
         currentUserId: string,
-        searchTerm: string | null,
-        pageNumber: number,
-        pageSize: number
+        searchTerm?: string | null,
+        pageNumber?: number,
+        pageSize?: number
     ): Promise<PagedResult<User>>;
 }
