@@ -11,7 +11,8 @@ export interface IFriendshipRepository {
     findFriendsPaged(
         userId: string, 
         pageNumber?: number, 
-        pageSize?: number
+        pageSize?: number,
+        searchTerm?: string
     ): Promise<PagedResult<Friendship>>;
     
     countFriendsByUserId(userId: string): Promise<number>;

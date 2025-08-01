@@ -12,6 +12,20 @@ import { ContactsCommandController } from './presentation/contacts.command.contr
 import { SendFriendRequestValidator } from './application/validators/send-friend-request.validator';
 import { AcceptFriendRequestValidator } from './application/validators/accept-friend-request.validator';
 import { FriendRequestDomainService } from './domain/service/friend-request.domain.service';
+import { ContactsQueryController } from './presentation/contacts.query.controller';
+import { SentFriendRequestHandler } from './application/use-cases/handler/sent-friend-request.handler';
+import { AcceptFriendRequestHandler } from './application/use-cases/handler/accept-friend-request.handler';
+import { RejectFriendRequestHandler } from './application/use-cases/handler/reject-friend-request.handler';
+import { RemoveFriendshipHandler } from './application/use-cases/handler/remove-friend.request.handler';
+import { GetFriendsHandler } from './application/use-cases/handler/get-friends.handler';
+import { GetContactsStatsHandler } from './application/use-cases/handler/get-contacts-stats.handler';
+import { GetReceivedFriendRequestsHandler } from './application/use-cases/handler/get-received-friend-requests.handler';
+import { GetSentFriendRequestsHandler } from './application/use-cases/handler/get-sent-friend-requests.handler';
+import { SearchUsersHandler } from './application/use-cases/handler/search-users.handler';
+import { FriendRequestAcceptedEventHandler } from './application/event-handler/friend-request-accepted.event-handler';
+import { FriendRequestSentEventHandler } from './application/event-handler/friend-request-sent.event-handler';
+import { RejectFriendRequestValidator } from './application/validators/reject-friend-request.validator';
+import { RemoveFriendshipValidator } from './application/validators/remove-friendship.validator';
 
 @Module({
     imports: [
@@ -23,7 +37,8 @@ import { FriendRequestDomainService } from './domain/service/friend-request.doma
         UserModule
     ],
     controllers: [
-        ContactsCommandController
+        ContactsCommandController,
+        ContactsQueryController
     ],
     providers: [
         FriendRequestDomainService,
@@ -36,14 +51,28 @@ import { FriendRequestDomainService } from './domain/service/friend-request.doma
         FriendshipOrmMapper,
 
         // Command Handlers
+        SentFriendRequestHandler,
+        AcceptFriendRequestHandler,
+        RejectFriendRequestHandler,
+        RemoveFriendshipHandler,
+
+        // Query Handlers
+        GetFriendsHandler,
+        GetContactsStatsHandler,
+        GetReceivedFriendRequestsHandler,
+        GetSentFriendRequestsHandler,
+        SearchUsersHandler,
         
 
         // Event Handlers
-        
+        FriendRequestAcceptedEventHandler,
+        FriendRequestSentEventHandler,
 
         // Validators
         SendFriendRequestValidator,
         AcceptFriendRequestValidator,
+        RejectFriendRequestValidator,
+        RemoveFriendshipValidator,
 
         { provide: 'IFriendRequestRepository', useExisting: FriendRequestRepository },
         { provide: 'IFriendshipRepository', useExisting: FriendshipRepository },

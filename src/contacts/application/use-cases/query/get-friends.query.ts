@@ -6,7 +6,8 @@ export class GetFriendsQuery extends Query<Result<PagedResult<any>>> {
     constructor(
         public readonly userId: string,
         public readonly pageNumber: number = 1, 
-        public readonly pageSize: number = 10
+        public readonly pageSize: number = 10,
+        public readonly searchTerm: string
     ){
         super();
     }

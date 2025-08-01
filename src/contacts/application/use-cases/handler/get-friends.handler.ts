@@ -16,12 +16,13 @@ export class GetFriendsHandler implements IQueryHandler<GetFriendsQuery> {
     ) {}
 
     async execute(query: GetFriendsQuery): Promise<Result<PagedResult<FriendOutputDto>>> {
-        const { userId, pageNumber, pageSize } = query;
+        const { userId, pageNumber, pageSize, searchTerm } = query;
 
         const pagedResult = await this.friendshipQueryRepository.findFriendsPaged(
             userId,
             pageNumber,
-            pageSize
+            pageSize,
+            searchTerm
         );
 
         // Mapear a DTOs usando tu mapper

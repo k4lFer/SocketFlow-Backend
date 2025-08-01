@@ -8,9 +8,12 @@ import { UserActive } from "src/shared/common/decorators/user-active.decorator";
 import { Response } from "express";
 import { SendFriendRequestCommand } from "../application/use-cases/command/send-friend-request.command";
 import { ResponseHelper } from "src/shared/response/response.helper";
+import { AcceptFriendRequestCommand } from "../application/use-cases/command/accept-friend-request.command";
+import { RejectFriendRequestCommand } from "../application/use-cases/command/reject-accept-friend-request.command";
+import { RemoveFriendshipCommand } from "../application/use-cases/command/remove-friend.command";
 
 @Controller('contacts')
-@ApiTags('contacts')
+@ApiTags('contacts-command')
 @ApiBearerAuth()
 @UseGuards(AccessTokenGuard)
 export class ContactsCommandController {
@@ -37,8 +40,8 @@ export class ContactsCommandController {
         @Body() input: SendRequestDto,
         @Res() res: Response
     ) : Promise<any> {
-        //const result = await this.command.execute(new AcceptFriendRequestCommand(user.userId, input));
-        //return ResponseHelper.send(res, result);
+        const result = await this.command.execute(new AcceptFriendRequestCommand(user.userId, input.receiverId));
+        return ResponseHelper.send(res, result);
     }
 
     @Post('reject-friend-request')
@@ -48,8 +51,8 @@ export class ContactsCommandController {
         @Body() input: SendRequestDto,
         @Res() res: Response
     ) : Promise<any> {
-        //const result = await this.command.execute(new RejectFriendRequestCommand(user.userId, input));
-        //return ResponseHelper.send(res, result);
+        const result = await this.command.execute(new RejectFriendRequestCommand(user.userId, input.receiverId));
+        return ResponseHelper.send(res, result);
     }
 
     @Post('remove-friend')
@@ -59,8 +62,8 @@ export class ContactsCommandController {
         @Body() input: SendRequestDto,
         @Res() res: Response
     ) : Promise<any> {
-        //const result = await this.command.execute(new RemoveFriendCommand(user.userId, input));
-        //return ResponseHelper.send(res, result);
+        const result = await this.command.execute(new RemoveFriendshipCommand(user.userId, input.receiverId));
+        return ResponseHelper.send(res, result);
     }
 
 }

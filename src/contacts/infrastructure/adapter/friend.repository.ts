@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Entity, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { FriendOrmEntity } from "../orm/friend.orm-entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FriendshipOrmMapper } from "../mapper/friend.orm.mapper";
@@ -14,19 +14,25 @@ export class FriendshipRepository implements IFriendshipRepository {
         private readonly repository: Repository<FriendOrmEntity>,
         private readonly mapper: FriendshipOrmMapper
     ) {}
-    async findFriendsPaged(userId: string, pageNumber?: number, pageSize?: number): Promise<PagedResult<Friendship>> {
+    async findFriendsPaged(userId: string, pageNumber?: number, pageSize?: number, searchTerm?: string): Promise<PagedResult<Friendship>> {
         const safePage = pageNumber && pageNumber > 0 ? pageNumber : 1;
         const safePageSize = pageSize && pageSize > 0 ? pageSize : 10;
 
         const offset = (safePage - 1) * safePageSize;
 
-        const [entities, total] = await this.repository.findAndCount({
-            where: { userId },
-            relations: ['friend'],
-            order: { createdAt: 'DESC' },
-            take: safePageSize,
-            skip: offset
-        }); 
+        const queryBuilder = this.repository.createQueryBuilder('friendship')
+            .leftJoinAndSelect('friendship.users', 'friendUser')
+            .where('friendship.userId = :userId', { userId });
+
+        if (searchTerm) {
+            queryBuilder.andWhere('friendUser.username LIKE :searchTerm', { searchTerm: `%${searchTerm}%` });
+        }
+
+        const [entities, total] = await queryBuilder
+            .orderBy('friendship.createdAt', 'DESC')
+            .skip(offset)
+            .take(safePageSize)
+            .getManyAndCount();
 
         const friendships = entities.map(entity => this.mapper.toDomain(entity));
 

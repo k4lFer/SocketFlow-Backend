@@ -13,7 +13,7 @@ import { SearchUsersQuery } from "../application/use-cases/query/search-users.qu
 import { GetContactsStatsQuery } from "../application/use-cases/query/get-contacts-stats.query";
 
 @Controller('contacts')
-@ApiTags('contacts')
+@ApiTags('contacts-query')
 @ApiBearerAuth()
 @UseGuards(AccessTokenGuard)
 export class ContactsQueryController {
@@ -36,13 +36,15 @@ export class ContactsQueryController {
     @ApiOperation({ summary: 'Obtener lista de amigos paginada' })
     @ApiQuery({ name: 'pageNumber', required: false, type: Number, description: 'Número de página' })
     @ApiQuery({ name: 'pageSize', required: false, type: Number, description: 'Tamaño de página' })
+    @ApiQuery({ name: 'searchTerm', required: false, type: String, description: 'Buscar por Username' })
     async getFriends(
         @UserActive() user: UserPayload,
         @Query('pageNumber') pageNumber: number = 1,
         @Query('pageSize') pageSize: number = 10,
+        @Query('searchTerm') searchTerm: string,
         @Res() res: Response
     ): Promise<any> {
-        const query = new GetFriendsQuery(user.userId, Number(pageNumber), Number(pageSize));
+        const query = new GetFriendsQuery(user.userId, Number(pageNumber), Number(pageSize), searchTerm);
         const result = await this.queryBus.execute(query);
         return ResponseHelper.send(res, result);
     }
@@ -79,7 +81,7 @@ export class ContactsQueryController {
 
     @Get('search')
     @ApiOperation({ summary: 'Buscar usuarios por username con paginación' })
-    @ApiQuery({ name: 'searchTerm', required: false, description: 'Username a buscar (opcional)' })
+    @ApiQuery({ name: 'searchTerm', required: false, description: 'Username a buscar (opcional)' , type: String } )
     @ApiQuery({ name: 'pageNumber', required: false, type: Number })
     @ApiQuery({ name: 'pageSize', required: false, type: Number })
     async searchUsers(

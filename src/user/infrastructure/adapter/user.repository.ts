@@ -31,7 +31,9 @@ export class UserRepository implements IUserRepository {
 
         queryBuilder.skip(offset).take(safePageSize);
 
-        const [users, total] = await queryBuilder.getManyAndCount();
+        const [users, total] = await queryBuilder
+            .orderBy('user.username', 'ASC')
+            .getManyAndCount();
 
         const domainUsers: User[] = users.map(user => this.mapper.toDomain(user));
 
