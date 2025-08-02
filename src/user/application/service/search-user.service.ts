@@ -14,7 +14,7 @@ export class SearchUserService {
         const pagedResult = await this.userRepository.searchUsersWithRelationshipStatus(userId, searchTerm, pageNumber, pageSize); // Assuming this always returns a PagedResult, even if empty
         // The searchUsersWithRelationshipStatus method is defined to always return a PagedResult, never null.
         // Therefore, the check `if (!pagedResult)` will never be true based on the current repository interface.
-        if(!pagedResult) return Result.error<any>(null, 'No users found')
+        if(!pagedResult) return Result.ok<any>(null, 'No users found')
         return Result.ok(pagedResult, 'Users retrieved successfully');
     }
 

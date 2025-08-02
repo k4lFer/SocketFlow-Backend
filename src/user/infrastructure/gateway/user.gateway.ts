@@ -79,7 +79,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect{
             console.log(`Usuario ${user.username} (${user.userId}) desconectado`);
         }
     }
- // Verificar si un usuario está online
+    // Verificar si un usuario está online
     isUserOnline(userId: string): boolean {
         return this.userSocketMap.has(userId);
     }

@@ -25,6 +25,10 @@ export class GetFriendsHandler implements IQueryHandler<GetFriendsQuery> {
             searchTerm
         );
 
+        if(pagedResult.items.length === 0) {
+            return Result.ok<any>(null, 'No friend requests found');
+        }
+
         // Mapear a DTOs usando tu mapper
         const mappedItems = this.mapper.toListResponse(pagedResult.items);
 

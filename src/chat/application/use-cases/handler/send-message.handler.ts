@@ -10,6 +10,7 @@ import { FileUploadService } from '../../service/file-upload.service';
 import { SendMessageDto } from '../../dto/out/send-message.dto';
 import { map } from 'rxjs';
 import { MessageMapper } from '../../mapper/message.mapper';
+import { ChatGateway } from 'src/chat/infrastructure/gateway/chat.gateway';
 
 @CommandHandler(SendMessageCommand)
 export class SendMessageHandler implements ICommandHandler<SendMessageCommand> {
@@ -21,6 +22,7 @@ export class SendMessageHandler implements ICommandHandler<SendMessageCommand> {
     @Inject(FileUploadService)
     private readonly fileUploadService: FileUploadService,
     private readonly messageMapper: MessageMapper,
+    private readonly chatGateway: ChatGateway,
   ) {}
 
   async execute(command: SendMessageCommand): Promise<Result<any>> {
@@ -48,6 +50,9 @@ export class SendMessageHandler implements ICommandHandler<SendMessageCommand> {
     if (!message.data) return Result.error(null, 'Failed to create message object');
 
     const saved = await this.messageRepository.save(message.data);
+    if(!saved) return Result.error(null, "Failed to save message");
+    
+    this.chatGateway.server.to(saved.chatId!).emit('new-message', saved);
 
     return Result.ok({ messageId: saved.id }, 'Message sent successfully');
   }

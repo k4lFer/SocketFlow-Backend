@@ -23,6 +23,10 @@ export class GetReceivedFriendRequestsHandler implements IQueryHandler<GetReceiv
             pageNumber,
             pageSize
         );
+        
+        if(pagedResult.items.length === 0) {
+            return Result.ok<any>(null, 'No friend requests found');
+        }
 
         const mapped = new PagedResult<FriendRequestOutputDto>(
             this.mapper.toListResponse(pagedResult.items),
