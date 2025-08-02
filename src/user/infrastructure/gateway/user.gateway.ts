@@ -45,6 +45,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect{
             if (existingSocketId) {
                 const existingSocket = this.server.sockets.sockets.get(existingSocketId);
                 if (existingSocket) {
+                    await this.deactivateSession.execute(existingSocketId);
                     existingSocket.disconnect();
                 }
             }
@@ -56,6 +57,8 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect{
                 socketId: client.id,
                 connectedAt: new Date()
             };
+
+            await this.createSession.execute({userId: user.userId, socketId: client.id})
 
             this.connectedUsers.set(client.id, connectedUser);
             this.userSocketMap.set(user.userId, client.id);
@@ -73,6 +76,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect{
     async handleDisconnect(client: Socket) {
         const user = this.connectedUsers.get(client.id);
         if (user) {
+            await this.deactivateSession.execute(user.socketId);
             this.connectedUsers.delete(client.id);
             this.userSocketMap.delete(user.userId);
 
