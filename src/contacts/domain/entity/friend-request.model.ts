@@ -11,7 +11,17 @@ export class FriendRequest extends AggregateRoot {
         public readonly receiverId: string,
         public status: FriendRequestStatus,
         public readonly createdAt: Date,
-        public updatedAt: Date
+        public updatedAt: Date,
+        public senderUser?: {
+            id: string;
+            username: string;
+            fullName?: string;
+          },
+        public receiverUser?: {
+            id: string;
+            username: string;
+            fullName?: string;
+        }
     ) {
         super();
     }

@@ -7,6 +7,7 @@ import { AuthService } from './application/service/auth.service';
 import { SignUpCommandHandler } from './application/use-cases/handler/sign-up.handler';
 import { SignInCommandHandler } from './application/use-cases/handler/sign-in.handler';
 import { AuthController } from './presentation/auth.command.controller';
+import { RefreshTokenHandler } from './application/use-cases/handler/refresh-token.handler';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AuthController } from './presentation/auth.command.controller';
     AuthService,
     SignUpCommandHandler,
     SignInCommandHandler,
+    RefreshTokenHandler,
     {
       provide: 'SignInValidator',
       useClass: SignInValidator,

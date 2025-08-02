@@ -11,9 +11,9 @@ export class FriendOutputMapper implements BaseResponseMapper<Friendship, Friend
             createdAt: domain.createdAt,
             friend: {
                 id: domain.friendId, // si tienes los datos relacionados del "friend", los llenas aquí
-                username: '',
-                firstName: '',
-                lastName: ''
+                username: domain.user.username,
+                fullname: domain.user.firstName + ' ' + domain.user.lastName,
+                bio: domain.user.bio, 
             }
         };        
     }

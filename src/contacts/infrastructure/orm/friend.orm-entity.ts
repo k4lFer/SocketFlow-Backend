@@ -6,10 +6,10 @@ export class FriendOrmEntity {
   @PrimaryColumn({ type: 'char', length: 36 })
   id: string;
 
-  @Column({ name: 'user_id' })
+  @Column({ name: 'user_id', type: 'char', length: 36 })
   userId: string;
-
-  @Column({ name: 'friend_id' })
+  
+  @Column({ name: 'friend_id', type: 'char', length: 36 })
   friendId: string;
 
   @CreateDateColumn({ name: 'created_at' })

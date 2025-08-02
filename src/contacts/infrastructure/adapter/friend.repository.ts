@@ -21,7 +21,8 @@ export class FriendshipRepository implements IFriendshipRepository {
         const offset = (safePage - 1) * safePageSize;
 
         const queryBuilder = this.repository.createQueryBuilder('friendship')
-            .leftJoinAndSelect('friendship.users', 'friendUser')
+        .leftJoinAndSelect('friendship.friend', 'friendUser')
+        .leftJoinAndSelect('friendship.user', 'user')
             .where('friendship.userId = :userId', { userId });
 
         if (searchTerm) {
@@ -58,7 +59,8 @@ export class FriendshipRepository implements IFriendshipRepository {
             where: [
                 { userId, friendId },
                 { userId: friendId, friendId: userId }
-            ]
+            ],
+            relations: ['friend'] // ← Esta línea es clave
         });
         return entity ? this.mapper.toDomain(entity) : null;
     }

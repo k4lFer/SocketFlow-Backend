@@ -7,15 +7,37 @@ import { FriendRequestStatus } from "src/contacts/domain/enum/friend-request.sta
 @Injectable()
 export class FriendRequestOrmMapper implements BaseDomainMapper<FriendRequest, FriendRequestOrmEntity> {
     toDomain(ormEntity: FriendRequestOrmEntity): FriendRequest {
+        const sender = ormEntity.sender;
+        const receiver = ormEntity.receiver;
+      
+        const senderUser = sender
+          ? {
+              id: sender.id,
+              username: sender.username,
+              fullName: `${sender.firstName || ''} ${sender.lastName || ''}`.trim()
+            }
+          : undefined;
+      
+        const receiverUser = receiver
+          ? {
+              id: receiver.id,
+              username: receiver.username,
+              fullName: `${receiver.firstName || ''} ${receiver.lastName || ''}`.trim()
+            }
+          : undefined;
+      
         return new FriendRequest(
-            ormEntity.id,
-            ormEntity.senderId,
-            ormEntity.receiverId,
-            ormEntity.status as FriendRequestStatus,
-            ormEntity.createdAt,
-            ormEntity.updatedAt
+          ormEntity.id,
+          ormEntity.senderId,
+          ormEntity.receiverId,
+          ormEntity.status as FriendRequestStatus,
+          ormEntity.createdAt,
+          ormEntity.updatedAt,
+          senderUser,
+          receiverUser
         );
-    }
+      }
+      
     toPersistence(domain: FriendRequest): FriendRequestOrmEntity {
         const ormEntity = new FriendRequestOrmEntity();
         ormEntity.id = domain.id;

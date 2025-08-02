@@ -6,7 +6,7 @@ export class FriendOutputDto {
     friend: {
         id: string;
         username: string;
-        firstName?: string;
-        lastName?: string;
+        fullname?: string;
+        bio?: string;
     };
 }

@@ -11,7 +11,7 @@ export class RemoveFriendshipHandler implements ICommandHandler<RemoveFriendship
         @Inject('IFriendshipRepository')
         private readonly friendshipRepository: IFriendshipRepository,
         
-        @Inject('RemoveFriendshipValidator')
+        @Inject('IRemoveFriendshipValidator')
         private readonly validator: IInputValidator<any>
     ) {}
 
@@ -22,11 +22,15 @@ export class RemoveFriendshipHandler implements ICommandHandler<RemoveFriendship
             return Result.failed(null, this.validator.messageDto);
         }
         const { userId, friendId } = command;
+        
+        if(userId == friendId) {
+            return Result.error(null, "You cannot remove yourself as a friend");
+        }
 
         // Buscar amistad
         const friendship = await this.friendshipRepository.findByUsers(userId, friendId);
         if (!friendship) {
-            return Result.error(null, 'Friendship not found');
+            return Result.error(null, 'Friendship not found or already removed');
         }
 
         // Aplicar reglas de dominio

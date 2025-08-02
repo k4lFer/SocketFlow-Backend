@@ -18,6 +18,10 @@ import { UserGateway } from './infrastructure/gateway/user.gateway';
 import { UserCommandController } from './presentation/user.command.controller';
 import { UserQueryController } from './presentation/user.query.controller';
 import { SearchUserService } from './application/service/search-user.service';
+import { UserProfileQuery } from './application/use-cases/query/user-profile.query';
+import { MyProfileOutMapper } from './application/mapper/my-profile.out.mapper';
+import { MyProfileQueryHandler } from './application/use-cases/handler/my-profile.handler';
+import { UserProfileQueryHandler } from './application/use-cases/handler/user-profile.handler';
 
     @Module({
         imports: [
@@ -38,11 +42,14 @@ import { SearchUserService } from './application/service/search-user.service';
             UserQueryService,
             UserReadFacade,
             SearchUserService,
+            MyProfileOutMapper,
+            UserProfileQueryHandler,
 
             UserGateway,
 
             // Handlers 
             UserPatchHandler,
+            MyProfileQueryHandler,
 
             // Servicios de dominio
             UserLoginService,

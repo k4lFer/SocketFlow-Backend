@@ -10,10 +10,10 @@ import { PagedResult } from "src/shared/domain/paged.result";
 @QueryHandler(GetContactsStatsQuery)
 export class GetContactsStatsHandler implements IQueryHandler<GetContactsStatsQuery> {
     constructor(
-        @Inject('IFriendshipQueryRepository')
+        @Inject('IFriendshipRepository')
         private readonly friendshipQueryRepository: IFriendshipRepository,
         
-        @Inject('IFriendRequestQueryRepository')
+        @Inject('IFriendRequestRepository')
         private readonly friendRequestQueryRepository: IFriendRequestRepository
     ) {}
     async execute(query: GetContactsStatsQuery): Promise<Result<ContactsStatsDto>> {

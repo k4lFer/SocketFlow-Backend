@@ -26,6 +26,8 @@ import { FriendRequestAcceptedEventHandler } from './application/event-handler/f
 import { FriendRequestSentEventHandler } from './application/event-handler/friend-request-sent.event-handler';
 import { RejectFriendRequestValidator } from './application/validators/reject-friend-request.validator';
 import { RemoveFriendshipValidator } from './application/validators/remove-friendship.validator';
+import { FriendOutputMapper } from './application/mapper/friend-output.mapper';
+import { FriendRequestOutMapper } from './application/mapper/frient-request.output.mapper';
 
 @Module({
     imports: [
@@ -49,6 +51,10 @@ import { RemoveFriendshipValidator } from './application/validators/remove-frien
         FriendshipRepository,
         FriendRequestOrmMapper,
         FriendshipOrmMapper,
+
+        // Mappers
+        FriendOutputMapper,
+        FriendRequestOutMapper,
 
         // Command Handlers
         SentFriendRequestHandler,
@@ -76,8 +82,10 @@ import { RemoveFriendshipValidator } from './application/validators/remove-frien
 
         { provide: 'IFriendRequestRepository', useExisting: FriendRequestRepository },
         { provide: 'IFriendshipRepository', useExisting: FriendshipRepository },
-        { provide: 'SendFriendRequestValidator', useExisting: SendFriendRequestValidator },
-        { provide: 'AcceptFriendRequestValidator', useExisting: AcceptFriendRequestValidator }
+        { provide: 'ISendFriendRequestValidator', useExisting: SendFriendRequestValidator },
+        { provide: 'IAcceptFriendRequestValidator', useExisting: AcceptFriendRequestValidator },
+        { provide: 'IRejectFriendRequestValidator', useExisting: RejectFriendRequestValidator },
+        { provide: 'IRemoveFriendshipValidator', useExisting: RemoveFriendshipValidator }
 
     ],
     exports: [],

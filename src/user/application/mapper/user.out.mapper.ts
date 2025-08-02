@@ -6,9 +6,14 @@ import { BaseResponseMapper } from "src/shared/mappers/base-response.mapper";
 @Injectable()
 export class UserOutMapper implements BaseResponseMapper<User, UserOutput> {
     toResponse(domain: User): UserOutput {
-        throw new Error("Method not implemented.");
+        return {
+            id: domain.id,
+            username: domain.username,
+            fullname: (domain.lastName + ' ' + domain.firstName) || '',
+            bio: domain.bio || '',
+        }
     }
     toListResponse(domains: User[]): UserOutput[] {
-        throw new Error("Method not implemented.");
+        return domains.map(domain => this.toResponse(domain));
     }
 }

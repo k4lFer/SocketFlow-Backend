@@ -11,7 +11,7 @@ export class RejectFriendRequestHandler implements ICommandHandler<RejectFriendR
         @Inject('IFriendRequestRepository')
         private readonly friendRequestRepository: IFriendRequestRepository,
         
-        @Inject('RejectFriendRequestValidator')
+        @Inject('IRejectFriendRequestValidator')
         private readonly validator: IInputValidator<any>
     ) {}
 

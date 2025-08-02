@@ -2,8 +2,6 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { SignInCommand } from "../command/sign-in.command";
 import { Result } from "src/shared/response/result.impl";
 import { AuthService } from "../../service/auth.service";
-import { Inject } from "@nestjs/common";
-import { IJwtService } from "src/jwt/domain/interface/jwt-service.interface";
 
 @CommandHandler(SignInCommand)
 export class SignInCommandHandler implements ICommandHandler<SignInCommand> {

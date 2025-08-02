@@ -31,7 +31,7 @@ export class AuthService {
     async signIn(dto: SignInDto): Promise<Result<any>> {
         if(!await this.signInValidator.isValid(dto)) return Result.failed(null, this.signInValidator.messageDto);
 
-        const authResult = await this.userAuthService.authenticate(dto.email, dto.password);
+        const authResult = await this.userAuthService.authenticate(dto.email, dto.password);    
         if (!authResult.isSuccess) {
             return Result.failed(null, authResult.messageDto);
         }

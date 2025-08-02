@@ -14,6 +14,9 @@ export class ChatMongo {
 
   @Prop({ type: Date, default: Date.now })
   createdAt: Date;
+
+  @Prop({ type: Date })
+  lastMessageAt?: Date;
 }
 
 export type ChatDocument = ChatMongo & Document;

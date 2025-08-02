@@ -28,12 +28,12 @@ export class UserQueryController {
     }
 
     @Get('profile/:id')
-    @ApiBody({ type: String })
     async getProfile(
+        @UserActive() user: UserPayload,
         @Param('id') id: string,
         @Res() res: Response
     ) : Promise<any> {
-        const result = await this.query.execute(new UserProfileQuery(id));
+        const result = await this.query.execute(new UserProfileQuery(user.userId, id));
         return ResponseHelper.send(res, result);
     }
 

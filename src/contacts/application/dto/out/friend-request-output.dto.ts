@@ -7,13 +7,11 @@ export class FriendRequestOutputDto {
     sender?: {
         id: string;
         username: string;
-        firstName?: string;
-        lastName?: string;
+        fullName?: string;
     };
     receiver?: {
         id: string;
         username: string;
-        firstName?: string;
-        lastName?: string;
+        fullName?: string;
     };
 }

@@ -11,8 +11,6 @@ export class UserOrmEntity {
   @Column({ nullable: true }) lastName?: string;
   @Column({ type: 'text', nullable: true }) bio?: string;
 
-  // 🔴 Elimina socketId y lastSeen
-
   @OneToMany(() => UserSessionOrm, session => session.user)
   sessions: UserSessionOrm[];
 }

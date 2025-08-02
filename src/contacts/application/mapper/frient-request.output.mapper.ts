@@ -12,10 +12,23 @@ export class FriendRequestOutMapper implements BaseResponseMapper<FriendRequest,
             receiverId: domain.receiverId,
             status: domain.status,
             createdAt: domain.createdAt,
-            sender: undefined, // opcional, rellena si lo necesitas
-            receiver: undefined
+            sender: domain.senderUser   
+                ? {
+                    id: domain.senderUser.id,
+                    username: domain.senderUser.username,
+                    fullName: domain.senderUser.fullName ?? '',
+                }
+                : undefined,
+            receiver: domain.receiverUser
+                ? {
+                    id: domain.receiverUser.id,
+                    username: domain.receiverUser.username,
+                    fullName: domain.receiverUser.fullName ?? '',
+                }
+                : undefined
         };
     }
+    
     toListResponse(domains: FriendRequest[]): FriendRequestOutputDto[] {
         return domains.map(domain => this.toResponse(domain));
     }

@@ -10,7 +10,7 @@ import { FriendOutputMapper } from "../../mapper/friend-output.mapper";
 @QueryHandler(GetFriendsQuery)
 export class GetFriendsHandler implements IQueryHandler<GetFriendsQuery> {
     constructor(
-        @Inject('IFriendshipQueryRepository')
+        @Inject('IFriendshipRepository')
         private readonly friendshipQueryRepository: IFriendshipRepository,
         private readonly mapper: FriendOutputMapper
     ) {}
@@ -35,6 +35,7 @@ export class GetFriendsHandler implements IQueryHandler<GetFriendsQuery> {
             pagedResult.pageNumber,
             pagedResult.pageSize
         );
+
 
         return Result.ok(result, 'Friends retrieved successfully');
 

@@ -15,12 +15,11 @@ export class SentFriendRequestHandler implements ICommandHandler<SendFriendReque
     constructor(
         @Inject('IFriendRequestRepository')
         private readonly friendRequestRepository: IFriendRequestRepository,
-        @Inject('IFriendRepository')
+        @Inject('IFriendshipRepository')
         private readonly friendshipRepository: IFriendshipRepository,
         @Inject('ISendFriendRequestValidator')
         private readonly validator: IInputValidator<SendRequestDto>,
         private readonly friendRequestDomainService: FriendRequestDomainService,
-        private readonly eventBus: EventBus,
     ) {}
 
     async execute(command: SendFriendRequestCommand): Promise<Result<any>> {
@@ -30,6 +29,10 @@ export class SentFriendRequestHandler implements ICommandHandler<SendFriendReque
         }
 
             const { senderId, receiverId } = command.data;
+
+            if(senderId == receiverId) {
+                return Result.error<any>(null, "You cannot send a friend request to yourself")
+            }
 
             // Aplicar reglas de dominio
             const validation = await this.friendRequestDomainService.canSendFriendRequest(

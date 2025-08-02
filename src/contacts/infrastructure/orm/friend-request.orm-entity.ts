@@ -7,12 +7,12 @@ export class FriendRequestOrmEntity {
   @PrimaryColumn({ type: 'char', length: 36 })
   id: string;
 
-  @Column({ name: 'sender_id' })
+  @Column({ name: 'sender_id', type: "char", length: 36, nullable: false })
   senderId: string;
 
-  @Column({ name: 'receiver_id' })
+  @Column({ name: 'receiver_id', type: "char", length: 36, nullable: false })
   receiverId: string;
-
+  
   @Column({
     type: 'enum',
     enum: FriendRequestStatus,

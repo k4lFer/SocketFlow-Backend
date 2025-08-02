@@ -10,7 +10,7 @@ import { FriendRequestOutMapper } from "../../mapper/frient-request.output.mappe
 @QueryHandler(GetSentFriendRequestsQuery)
 export class GetSentFriendRequestsHandler implements IQueryHandler<GetSentFriendRequestsQuery> {
     constructor(
-        @Inject('IFriendRequestQueryRepository')
+        @Inject('IFriendRequestRepository')
         private readonly friendRequestQueryRepository: IFriendRequestRepository,
         private readonly mapper:  FriendRequestOutMapper
     ) {}

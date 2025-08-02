@@ -16,7 +16,7 @@ export class AcceptFriendRequestHandler implements ICommandHandler<AcceptFriendR
         @Inject('IFriendshipRepository')
         private readonly friendshipRepository: IFriendshipRepository,
         
-        @Inject('AcceptFriendRequestValidator')
+        @Inject('IAcceptFriendRequestValidator')
         private readonly validator: IInputValidator<any>,
         
         private readonly friendRequestDomainService: FriendRequestDomainService
@@ -36,7 +36,7 @@ export class AcceptFriendRequestHandler implements ICommandHandler<AcceptFriendR
             return Result.error(null, 'Friend request not found');
         }
 
-            // Verificar permisos de dominio
+        // Verificar permisos de dominio
         if (!friendRequest.canBeRespondedBy(userId)) {
             return Result.error(null, 'Cannot respond to this request');
         }
@@ -53,7 +53,7 @@ export class AcceptFriendRequestHandler implements ICommandHandler<AcceptFriendR
         // Persistir cambios
         await this.friendRequestRepository.save(friendRequest);
         for (const friendship of friendships) {
-            await this.friendshipRepository.save(friendship);
+            const result = await this.friendshipRepository.save(friendship);
         }
 
         // Confirmar eventos
