@@ -59,7 +59,7 @@ export class ContactsCommandController {
         return ResponseHelper.send(res, result);
     }
 
-    @Post('remove-friend')
+    @Delete('remove-friend')
     @ApiBody({ type: RemoveFriendDto })
     async removeFriend(
         @UserActive() user: UserPayload,
@@ -70,7 +70,7 @@ export class ContactsCommandController {
         return ResponseHelper.send(res, result);
     }
 
-    @Delete("cancel-friend-request/:requestId")
+    @Post("cancel-friend-request/:requestId")
     async deleteFriend(
         @Param("requestId") requestId: string, 
         @UserActive() user: UserPayload,
