@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from './jwt/jwt.module';
@@ -9,6 +9,7 @@ import configuration from './shared/common/config/configuration';
 import { DatabaseModule } from './shared/database/database.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { UserSessionsModule } from './user_sessions/user_sessions.module';
+import { CookieMiddleware } from './shared/common/middleware/cookie.middleware';
 
 @Module({
   imports: [
@@ -30,4 +31,10 @@ import { UserSessionsModule } from './user_sessions/user_sessions.module';
 
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CookieMiddleware)
+      .forRoutes('*')
+  }
+}

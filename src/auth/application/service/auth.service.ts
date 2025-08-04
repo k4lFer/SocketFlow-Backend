@@ -40,7 +40,10 @@ export class AuthService {
         const out = new SignInOutputDto();
         out.user_id = authResult.data.user_id;
         out.accessToken = await this.jwtService.generateAccessToken({ id: authResult.data.user_id, username: authResult.data.username });
-        out.refreshToken = await this.jwtService.generateRefreshToken({ id: authResult.data.user_id, username: authResult.data.username });        
+        const refreshToken = await this.jwtService.generateRefreshToken({ id: authResult.data.user_id, username: authResult.data.username });        
+
+        res?.setRefreshTokenCookie(refreshToken!);
+        
         return Result.ok(out, 'Login successful');
     }
 

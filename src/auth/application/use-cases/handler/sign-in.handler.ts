@@ -10,6 +10,6 @@ export class SignInCommandHandler implements ICommandHandler<SignInCommand> {
     ) { }
     
     async execute(command: SignInCommand): Promise<Result<any>> {
-        return await this.signInService.signIn(command.input);
+        return await this.signInService.signIn(command.input, command.res);
     }
 }

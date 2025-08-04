@@ -15,7 +15,7 @@ export class RefreshTokenHandler implements ICommandHandler<RefreshTokenCommand>
         if(!command.input) {
           return Result.error(null, 'Refresh token is required');  
         }
-        const result = await this.jwtService.generateAccessTokenByRefreshToken(command.input.refreshToken);
+        const result = await this.jwtService.generateAccessTokenByRefreshToken(command.input);
         if(result.isSuccess) {
 
             return Result.ok(result.data, typeof result.messageDto);

@@ -1,13 +1,12 @@
 import { Body, Controller, Ip, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { CommandBus } from "@nestjs/cqrs";
-import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { SignInDto } from "../application/dto/in/sign-in.dto";
 import { Request, Response } from "express";
 import { SignInCommand } from "../application/use-cases/command/sign-in.command";
 import { ResponseHelper } from "src/shared/response/response.helper";
 import { SignUpDto } from "../application/dto/in/sign-up.dto";
 import { SignUpCommand } from "../application/use-cases/command/sign-up.command";
-import { RefreshTokenDto } from "../application/dto/out/refresh-token.input.dto";
 import { RefreshTokenCommand } from "../application/use-cases/command/refresh-token.command";
 import { AccessTokenGuard } from "src/shared/common/guards/access-token.guard";
 import { UserActive } from "src/shared/common/decorators/user-active.decorator";
@@ -27,7 +26,7 @@ export class AuthController {
         @Body() input: SignInDto,
         @Res() res: Response,
     ) : Promise<any> {
-        const result = await this.command.execute(new SignInCommand(input));
+        const result = await this.command.execute(new SignInCommand(input, res));
         return ResponseHelper.send(res, result);
     }
     
@@ -43,14 +42,13 @@ export class AuthController {
 
     
     @Post('refresh-token')
-    @ApiBody({ type: RefreshTokenDto })
+    @ApiOperation({ summary: 'Refresh access token' })
     async refreshToken(
-        @Body() input: RefreshTokenDto,
         @Res() res: Response, 
         @Req() req: Request
     ) : Promise<any> {
-        // const refreshToken = req.headers['refreshToken'];    
-        const result = await this.command.execute(new RefreshTokenCommand(input));
+        const refreshToken = req.cookies?.refreshToken;  
+        const result = await this.command.execute(new RefreshTokenCommand(refreshToken));
         return ResponseHelper.send(res, result);
     }
 
