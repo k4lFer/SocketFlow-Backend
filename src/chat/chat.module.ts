@@ -61,9 +61,9 @@
       ChatGateway,
       
       // Commands
-      SendMessageCommand,
-      MarkMessageAsSeenCommand,
-      DeleteMessageCommand,
+      SendMessageHandler,
+      MarkMessageAsSeenHandler,
+      DeleteMessageHandler,
       
       // Handlers
       SendMessageHandler,

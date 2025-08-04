@@ -8,27 +8,28 @@ import { UserCreateInput } from "src/user/application/dto/in/user.create";
 import { SignUpDto } from "../dto/in/sign-up.dto";
 import { IJwtService } from "src/jwt/domain/interface/jwt-service.interface";
 import { SignInOutputDto } from "../dto/out/signin-output.dto";
+import { Response } from "express";
 
 @Injectable()
 export class AuthService { 
     constructor(
-        private readonly userAuthService: UserAuthService,
 
+        private readonly userAuthService: UserAuthService,
+        
         @Inject('SignInValidator')
         private readonly signInValidator: IInputValidator<SignInDto>,
-
+        
         @Inject('SignUpValidator')
         private readonly signUpValidator: IInputValidator<SignUpDto>,
-
-
+        
         @Inject('IService<UserCreateInput>')
         private readonly createUserService: IService<UserCreateInput>,
-
+        
         @Inject('IJwtService')
         private readonly jwtService: IJwtService,
     ) {}
 
-    async signIn(dto: SignInDto): Promise<Result<any>> {
+    async signIn(dto: SignInDto, res?: Response): Promise<Result<any>> {
         if(!await this.signInValidator.isValid(dto)) return Result.failed(null, this.signInValidator.messageDto);
 
         const authResult = await this.userAuthService.authenticate(dto.email, dto.password);    
@@ -39,8 +40,7 @@ export class AuthService {
         const out = new SignInOutputDto();
         out.user_id = authResult.data.user_id;
         out.accessToken = await this.jwtService.generateAccessToken({ id: authResult.data.user_id, username: authResult.data.username });
-        out.refreshToken = await this.jwtService.generateRefreshToken({ id: authResult.data.user_id, username: authResult.data.username });
-
+        out.refreshToken = await this.jwtService.generateRefreshToken({ id: authResult.data.user_id, username: authResult.data.username });        
         return Result.ok(out, 'Login successful');
     }
 

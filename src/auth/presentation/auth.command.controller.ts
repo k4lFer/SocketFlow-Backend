@@ -2,7 +2,7 @@ import { Body, Controller, Ip, Post, Req, Res, UseGuards } from "@nestjs/common"
 import { CommandBus } from "@nestjs/cqrs";
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import { SignInDto } from "../application/dto/in/sign-in.dto";
-import { Response } from "express";
+import { Request, Response } from "express";
 import { SignInCommand } from "../application/use-cases/command/sign-in.command";
 import { ResponseHelper } from "src/shared/response/response.helper";
 import { SignUpDto } from "../application/dto/in/sign-up.dto";
@@ -46,8 +46,10 @@ export class AuthController {
     @ApiBody({ type: RefreshTokenDto })
     async refreshToken(
         @Body() input: RefreshTokenDto,
-        @Res() res: Response
+        @Res() res: Response, 
+        @Req() req: Request
     ) : Promise<any> {
+        // const refreshToken = req.headers['refreshToken'];    
         const result = await this.command.execute(new RefreshTokenCommand(input));
         return ResponseHelper.send(res, result);
     }
